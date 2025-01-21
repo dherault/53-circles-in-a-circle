@@ -13,11 +13,16 @@
   </style>
 </head>
 
-<body>
+<body style="font-family:sans-serif;">
   <canvas id="canvas" style="width:100vw;height:100vh;"></canvas>
-  <button onclick="addCords()">
-    Add cords
-  </button>
+  <div style="display:flex;gap:8px;">
+    <button onclick="addCords()">
+      Add cords
+    </button>
+    <div>
+      2756 cords
+    </div>
+  </div>
   <script>
     const canvas = document.getElementById("canvas");
     const ctx = canvas.getContext("2d");
