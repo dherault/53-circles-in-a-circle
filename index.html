@@ -9,6 +9,9 @@
 
 <body>
   <canvas id="canvas" style="width:100vw;height:100vh;"></canvas>
+  <button onclick="addCords()">
+    Add cords
+  </button>
   <script>
     const canvas = document.getElementById("canvas");
     const ctx = canvas.getContext("2d");
@@ -17,32 +20,87 @@
     canvas.width = width;
     canvas.height = height;
 
-    const centerX = width / 2;
-    const centerY = height / 2;
-    const bigRadius = 360; // Radius of the big circle
-    const smallRadius = 12; // Radius of small circles
-    const numCircles = 53;
+    function drawCircles() {
+      const centerX = width / 2;
+      const centerY = height / 2;
+      const bigRadius = 360; // Radius of the big circle
+      const smallRadius = 12; // Radius of small circles
+      const numCircles = 53;
 
-    // Draw big circle
-    ctx.beginPath();
-    ctx.arc(centerX, centerY, bigRadius, 0, Math.PI * 2);
-    ctx.strokeStyle = "black";
-    ctx.lineWidth = 2;
-    ctx.stroke();
-
-    // Draw 53 smaller circles around the big circle
-    for (let i = 0; i < numCircles; i++) {
-      const angle = (i / numCircles) * Math.PI * 2;
-      const x = centerX + bigRadius * Math.cos(angle);
-      const y = centerY + bigRadius * Math.sin(angle);
-
+      // Draw big circle
       ctx.beginPath();
-      ctx.arc(x, y, smallRadius, 0, Math.PI * 2);
-      ctx.fillStyle = "white";
-      ctx.fill();
+      ctx.arc(centerX, centerY, bigRadius, 0, Math.PI * 2);
+      ctx.strokeStyle = "black";
+      ctx.lineWidth = 2;
       ctx.stroke();
+
+      // Draw 53 smaller circles around the big circle
+      for (let i = 0; i < numCircles; i++) {
+        const angle = (i / numCircles) * Math.PI * 2;
+        const x = centerX + bigRadius * Math.cos(angle);
+        const y = centerY + bigRadius * Math.sin(angle);
+
+        ctx.beginPath();
+        ctx.arc(x, y, smallRadius, 0, Math.PI * 2);
+        ctx.fillStyle = "white";
+        ctx.fill();
+        ctx.stroke();
+      }
+    }
+    drawCircles();
+  </script>
+  <script>
+    function addCords() {
+      const canvas = document.getElementById("canvas");
+      const ctx = canvas.getContext("2d");
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+
+      const centerX = width / 2;
+      const centerY = height / 2;
+      const bigRadius = 360; // Radius of the big circle
+      const smallRadius = 12; // Radius of small circles
+      const numCircles = 53;
+      // const cordThreshold = 53
+
+      for (let i = 0; i < numCircles / 2; i++) {
+        for (let j = 0; j < numCircles; j++) {
+
+          // if (diff > cordThreshold) continue
+          const k1 = j + i
+          const k2 = j - i
+          const angle1 = (k1 / numCircles) * Math.PI * 2;
+          const angle2 = (k2 / numCircles) * Math.PI * 2;
+          const x1 = centerX + bigRadius * Math.cos(angle1);
+          const y1 = centerY + bigRadius * Math.sin(angle1);
+          const x2 = centerX + bigRadius * Math.cos(angle2);
+          const y2 = centerY + bigRadius * Math.sin(angle2);
+          const diff = Math.min(Math.abs(k1 - k2), numCircles - Math.abs(k1 - k2))
+
+          ctx.beginPath();
+          ctx.moveTo(x1, y1);
+          ctx.lineTo(x2, y2);
+          ctx.strokeStyle = grayscaleColor(1 - 1.333 * diff / numCircles);
+          ctx.stroke();
+        }
+      }
+
+      drawCircles();
+
+      function grayscaleColor(value) {
+        // Ensure value is clamped between 0 and 1
+        value = Math.min(1, Math.max(0, value));
+
+        // Convert to a grayscale value (0 = black, 255 = white)
+        let gray = Math.round(value * 255);
+
+        // Convert to hex and ensure two-digit format
+        let hex = gray.toString(16).padStart(2, '0');
+
+        // Return grayscale hex color
+        return `#${hex}${hex}${hex}`;
+      }
     }
   </script>
 </body>
-
 </html>
