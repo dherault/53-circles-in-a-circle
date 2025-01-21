@@ -56,7 +56,7 @@
     }
 
     function addCords() {
-      for (let i = 0; i < numCircles / 2; i++) {
+      for (let i = Math.floor(numCircles / 2); i >= 0; i--) {
         for (let j = 0; j < numCircles; j++) {
           const k1 = j + i
           const k2 = j - i
