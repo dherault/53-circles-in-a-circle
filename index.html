@@ -5,6 +5,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Circle Pattern</title>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+    }
+  </style>
 </head>
 
 <body>
@@ -15,18 +21,19 @@
   <script>
     const canvas = document.getElementById("canvas");
     const ctx = canvas.getContext("2d");
-    const width = window.innerWidth;
-    const height = window.innerHeight;
+    const devicePixelRatio = window.devicePixelRatio || 1
+    const width = window.innerWidth * devicePixelRatio;
+    const height = window.innerHeight * devicePixelRatio;
     canvas.width = width;
     canvas.height = height;
 
-    function drawCircles() {
-      const centerX = width / 2;
-      const centerY = height / 2;
-      const bigRadius = 360; // Radius of the big circle
-      const smallRadius = 12; // Radius of small circles
-      const numCircles = 53;
+    const centerX = width / 2;
+    const centerY = height / 2;
+    const bigRadius = 1024 - 256 - 64 - 16 - 4; // Radius of the big circle
+    const smallRadius = 32; // Radius of small circles
+    const numCircles = 53;
 
+    function drawCircles() {
       // Draw big circle
       ctx.beginPath();
       ctx.arc(centerX, centerY, bigRadius, 0, Math.PI * 2);
@@ -37,8 +44,8 @@
       // Draw 53 smaller circles around the big circle
       for (let i = 0; i < numCircles; i++) {
         const angle = (i / numCircles) * Math.PI * 2;
-        const x = centerX + bigRadius * Math.cos(angle);
-        const y = centerY + bigRadius * Math.sin(angle);
+        const x = centerX + bigRadius * Math.cos(angle - Math.PI / 2);
+        const y = centerY + bigRadius * Math.sin(angle - Math.PI / 2);
 
         ctx.beginPath();
         ctx.arc(x, y, smallRadius, 0, Math.PI * 2);
@@ -47,34 +54,18 @@
         ctx.stroke();
       }
     }
-    drawCircles();
-  </script>
-  <script>
+
     function addCords() {
-      const canvas = document.getElementById("canvas");
-      const ctx = canvas.getContext("2d");
-      const width = window.innerWidth;
-      const height = window.innerHeight;
-
-      const centerX = width / 2;
-      const centerY = height / 2;
-      const bigRadius = 360; // Radius of the big circle
-      const smallRadius = 12; // Radius of small circles
-      const numCircles = 53;
-      // const cordThreshold = 53
-
       for (let i = 0; i < numCircles / 2; i++) {
         for (let j = 0; j < numCircles; j++) {
-
-          // if (diff > cordThreshold) continue
           const k1 = j + i
           const k2 = j - i
           const angle1 = (k1 / numCircles) * Math.PI * 2;
           const angle2 = (k2 / numCircles) * Math.PI * 2;
-          const x1 = centerX + bigRadius * Math.cos(angle1);
-          const y1 = centerY + bigRadius * Math.sin(angle1);
-          const x2 = centerX + bigRadius * Math.cos(angle2);
-          const y2 = centerY + bigRadius * Math.sin(angle2);
+          const x1 = centerX + bigRadius * Math.cos(angle1 - Math.PI / 2);
+          const y1 = centerY + bigRadius * Math.sin(angle1 - Math.PI / 2);
+          const x2 = centerX + bigRadius * Math.cos(angle2 - Math.PI / 2);
+          const y2 = centerY + bigRadius * Math.sin(angle2 - Math.PI / 2);
           const diff = Math.min(Math.abs(k1 - k2), numCircles - Math.abs(k1 - k2))
 
           ctx.beginPath();
@@ -101,6 +92,8 @@
         return `#${hex}${hex}${hex}`;
       }
     }
+
+    drawCircles();
   </script>
 </body>
 </html>
